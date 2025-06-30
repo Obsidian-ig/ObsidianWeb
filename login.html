@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Login | ObsidianWeb!</title>
+  </head>
+  <body>
+    <h1><strong>Login To Your ObsidianWeb! Account:</strong></h1>
+    <lable>Username:</lable>
+    <input type="text" id="username" />
+    <br />
+    <lable>Password:</lable>
+    <input type="text" id="password" />
+    <br />
+    <button onClick="login()">Login</button>
+    <br/><br/>
+    <strong id="response"></strong>
+
+    <script>
+      // when the window is loaded, check to see if the item: "loggedIn" exists, and if it does check the value of it
+      // if the value is true, then set it to false and delete the session token
+      // if the value is false, but the session token still exists: delete the session token
+      window.onload = () => {
+        if (localStorage.getItem("loggedIn")) {
+            if (localStorage.getItem("loggedIn") === "true") {
+                localStorage.setItem("loggedIn", "false");
+                if (localStorage.getItem("sessionToken")) {
+                    localStorage.removeItem("sessionToken");
+                }
+            } else if (localStorage.getItem("loggedIn") === "false") {
+                if (localStorage.getItem("sessionToken")) {
+                    localStorage.removeItem("sessionToken");
+                }
+            }
+        }
+      };
+    function setCookie(name, value, days) {
+      const date = new Date();
+      date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000); // Days to milliseconds
+      const expires = "expires=" + date.toUTCString();
+      document.cookie = `${name}=${value}; ${expires}; path=/`;
+    }
+
+  function getCookie(name) {
+    const cookies = document.cookie.split("; ");
+    for (const cookie of cookies) {
+        const [key, value] = cookie.split("=");
+        if (key === name) return value;
+    }
+    return null; // Cookie not found
+  }
+
+      async function login() {
+        let username2 = document.getElementById("username").value;
+        let password2 = document.getElementById("password").value;
+        try {
+          const response = await fetch(
+            "http://localhost:3000/api/users/login",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" }, // Specify JSON data
+              body: JSON.stringify({
+                username: username2,
+                password: password2,
+              }),
+            }
+          );
+
+          const data = await response.json();
+          const log = document.getElementById("response");
+          if (response.ok) {
+            const token = data.token;
+            setCookie("username", username2, 30)
+            setCookie("sessionToken", token, 30)
+            setCookie("loggedIn", "true", 30)
+            localStorage.setItem("loggedIn", "true")
+            log.style.color = "green";
+            log.innerText = "Logged in succesfully!";
+          } else {
+            log.style.color = "red";
+            log.innerText = response.status + ": " + data.message;
+        }
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,26 @@
+{
+  "name": "obsidianwebroot",
+  "version": "1.0.0",
+  "description": "A static website hosting app",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "ObsidianDev",
+  "license": "ISC",
+  "dependencies": {
+    "@google-cloud/local-auth": "^2.1.0",
+    "axios": "^1.7.7",
+    "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
+    "ejs": "^3.1.10",
+    "express": "^4.21.1",
+    "fs": "^0.0.1-security",
+    "googleapis": "^105.0.0",
+    "mongodb": "^6.10.0",
+    "mongoose": "^8.8.1",
+    "path": "^0.12.7",
+    "process": "^0.11.10"
+  }
+}

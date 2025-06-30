@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard | ObsidianWeb!</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+        }
+        #navBar button {
+            min-width: 80px; 
+            background-color: black; 
+            color: white; 
+            border-style: none;
+        }
+
+        #navBar button:hover {
+            background-color: rgb(64, 64, 64); 
+        }
+
+        #navBar button:active {
+            background-color: black; 
+        }
+
+        /* Particle container */
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            top: 0;
+            left: 0;
+        }
+
+        #mainContainer {
+            border-style: ridge; 
+            border-width: 0.5px; 
+            max-width: 50%; 
+            display: flex; 
+            padding: 5px;
+        }
+
+        #usernamepassword {
+            border-style: none; 
+            width: 100%;
+            display: flex; 
+            flex-direction: column; 
+            align-items: flex-start;
+            padding: 5px;
+        }
+
+        #changeusernamepassword {
+            border-style: none; 
+            width: 100%;
+            display: flex; 
+            align-items: flex-end;
+            flex-direction:column;
+            padding: 5px;
+        }
+
+        #changeusernamepassword input {
+            background-color: black;
+            color: white;
+            border-style: ridge;
+        }
+
+        #changeusernamepassword input:focus {
+            border-radius: 0px;
+            border-style: ridge;
+            border-color: blue;
+        }
+    </style>
+
+    <!-- Include particles.js library -->
+    <script src="particles.js"></script>
+</head>
+<body>
+    <div id="particles-js"></div>
+
+    <div id="navBar" style="background-color: black; color: white; max-height: 100px; width: 100%; display: flex; flex-direction: row; font-size: 35px; gap: 15px;">
+    <strong>ObsidianWeb!</strong>
+    <button>Websites</button>
+    <button>Dashboard</button>
+    <button>Settings</button>
+    </div>
+    <center>
+    <div id="mainContainer">
+        <div id="usernamepassword" >
+            <strong>Site name:</strong>
+            <p><%= user.name %>.obsidianweb.org</p>
+            <strong>Email:</strong>
+            <p><%= user.email %></p>
+        </div>
+        <div id="changeusernamepassword">
+            <div>
+                <strong>Change Site Name:</strong><br/>
+                <input placeholder="<%= user.name %>"></input><button>Change</button>
+            </div>
+            <div>
+                <strong>Change Password:</strong><br/>
+                <input placeholder="Password"></input><button>Change</button>
+            </div>
+            <div>
+                <strong>Change Email:</strong><br/>
+                <input placeholder="<%= user.email %>"></input><button>Change</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="mainContainer">
+        <p style="padding-right: 5px;"><%= user.name %>.obsidianweb.org,</p>
+        <p style="padding-right: 5px;">Files: <%= fileCount %>,</p>
+        <p style="padding-right: 5px;">Folders: <%= folderCount %>,</p>
+        <p style="padding-right: 5px;"><%= totalSizeConverted %>/10MB</p>
+    </div>
+    </center>
+
+    
+    <!-- Add particles.js config -->
+    <script>
+    particlesJS("particles-js", {
+        "particles": {
+            "number": {
+                "value": 80,
+                "density": {
+                    "enable": true,
+                    "value_area": 800
+                }
+            },
+            "color": {
+                "value": "#ffffff"
+            },
+            "shape": {
+                "type": "circle",
+                "stroke": {
+                    "width": 0,
+                    "color": "#000000"
+                },
+                "polygon": {
+                    "nb_sides": 5
+                }
+            },
+            "opacity": {
+                "value": 0.5,
+                "random": false,
+                "anim": {
+                    "enable": false,
+                    "speed": 1,
+                    "opacity_min": 0.1,
+                    "sync": false
+                }
+            },
+            "size": {
+                "value": 3,
+                "random": true,
+                "anim": {
+                    "enable": false,
+                    "speed": 40,
+                    "size_min": 0.1,
+                    "sync": false
+                }
+            },
+            "line_linked": {
+                "enable": true,
+                "distance": 150,
+                "color": "#ffffff",
+                "opacity": 0.4,
+                "width": 1
+            },
+            "move": {
+                "enable": true,
+                "speed": 6,
+                "direction": "none",
+                "random": false,
+                "straight": false,
+                "out_mode": "out",
+                "bounce": false,
+                "attract": {
+                    "enable": false,
+                    "rotateX": 600,
+                    "rotateY": 1200
+                }
+            }
+        },
+        "interactivity": {
+            "detect_on": "canvas",
+            "events": {
+                "onhover": {
+                    "enable": true,
+                    "mode": "repulse"
+                },
+                "onclick": {
+                    "enable": true,
+                    "mode": "push"
+                },
+                "resize": true
+            },
+            "modes": {
+                "grab": {
+                    "distance": 400,
+                    "line_linked": {
+                        "opacity": 1
+                    }
+                },
+                "bubble": {
+                    "distance": 400,
+                    "size": 40,
+                    "duration": 2,
+                    "opacity": 8,
+                    "speed": 3
+                },
+                "repulse": {
+                    "distance": 100,
+                    "duration": 0.4
+                },
+                "push": {
+                    "particles_nb": 4
+                },
+                "remove": {
+                    "particles_nb": 2
+                }
+            }
+        },
+        "retina_detect": true
+    });
+    </script>
+</body>
+</html>

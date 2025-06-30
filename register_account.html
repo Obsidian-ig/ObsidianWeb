@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Register Account | ObsidianWeb!</title>
+  </head>
+  <body>
+    <h1><strong>Register Your ObsidianWeb! Account:</strong></h1>
+    <lable>Username:</lable>
+    <input type="text" id="username" />
+    <br />
+    <lable>Password:</lable>
+    <input type="text" id="password" />
+    <br />
+    <lable>Email:</lable>
+    <input type="text" id="email" />
+    <br />
+    <button onClick="registerUser()">Register</button>
+    <div id="requirementsContainer">
+      <p id="usernameNotTaken">-Username not taken.</p>
+      <p id="validEmail">-Email is valid.</p>
+      <p id="passwordIsLongEnough">-Password is at least 8 characters long.</p>
+      <p id="passwordHasSpecialCharacter">
+        -Password has at least one special character. (!, @, #, $, %, ^, &, *,
+        (, ), -, _, +, =, ~, `, [, ], {, }, \, |, :, ;, ', ", ., /, ?, ,)
+      </p>
+    </div>
+
+    <script>
+      const usernameInput = document.getElementById("username");
+
+      usernameInput.addEventListener("input", () => {
+        // Clear the timeout if it exists
+        try {
+          clearTimeout(typingTimeout);
+        } catch (e) {}
+
+        // Set a timeout to check if the user has stopped typing
+        typingTimeout = setTimeout(() => {
+          // User has stopped typing, perform actions here
+          console.log("User stopped typing");
+          checkUsernameUse();
+          // Add your desired logic here, e.g., sending a request to the server
+        }, 2000); // Adjust the timeout duration as needed
+      });
+
+      const emailInput = document.getElementById("email");
+
+      emailInput.addEventListener("input", () => {
+        if (emailInput.value && emailInput.value.includes("@")) {
+          // Email is valid
+          document.getElementById("validEmail").style.color = "green";
+        } else {
+          // Email is invalid
+          document.getElementById("validEmail").style.color = "red";
+        }
+      });
+
+      const passwordInput = document.getElementById("password");
+
+      passwordInput.addEventListener("input", () => {
+        if (passwordInput.value && passwordInput.value.length > 7) {
+          // Email is valid
+          document.getElementById("passwordIsLongEnough").style.color = "green";
+        } else {
+          // Email is invalid
+          document.getElementById("passwordIsLongEnough").style.color = "red";
+        }
+        if (
+          (passwordInput.value && passwordInput.value.includes("!")) ||
+          passwordInput.value.includes("@") ||
+          passwordInput.value.includes("#") ||
+          passwordInput.value.includes("$") ||
+          passwordInput.value.includes("%") ||
+          passwordInput.value.includes("^") ||
+          passwordInput.value.includes("&") ||
+          passwordInput.value.includes("*") ||
+          passwordInput.value.includes("(") ||
+          passwordInput.value.includes(")") ||
+          passwordInput.value.includes("-") ||
+          passwordInput.value.includes("_") ||
+          passwordInput.value.includes("+") ||
+          passwordInput.value.includes("=") ||
+          passwordInput.value.includes("~") ||
+          passwordInput.value.includes("`") ||
+          passwordInput.value.includes("{") ||
+          passwordInput.value.includes("}") ||
+          passwordInput.value.includes("[") ||
+          passwordInput.value.includes("]") ||
+          passwordInput.value.includes("|") ||
+          passwordInput.value.includes("\\") ||
+          passwordInput.value.includes(":") ||
+          passwordInput.value.includes(";") ||
+          passwordInput.value.includes("'") ||
+          passwordInput.value.includes('"') ||
+          passwordInput.value.includes("<") ||
+          passwordInput.value.includes(",") ||
+          passwordInput.value.includes(">") ||
+          passwordInput.value.includes(".") ||
+          passwordInput.value.includes("?") ||
+          passwordInput.value.includes("/")
+        ) {
+          document.getElementById("passwordHasSpecialCharacter").style.color =
+            "green";
+        } else {
+          document.getElementById("passwordHasSpecialCharacter").style.color =
+            "red";
+        }
+      });
+
+      async function checkUsernameUse() {
+        let usernameWanted = document.getElementById("username").value;
+        try {
+          const response = await fetch(
+            "http://localhost:3000/api/users/checkUsername",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" }, // Specify JSON data
+              body: JSON.stringify({
+                usernameToFind: usernameWanted,
+              }),
+            }
+          );
+
+          const data = await response.json();
+
+          if (response.ok) {
+            document.getElementById("usernameNotTaken").style.color = "green";
+          } else {
+            document.getElementById("usernameNotTaken").style.color = "red";
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      }
+
+      async function registerUser() {
+        let username2 = document.getElementById("username").value;
+        let password2 = document.getElementById("password").value;
+        let email2 = document.getElementById("email").value;
+        try {
+          const response = await fetch(
+            "http://localhost:3000/api/users/register",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" }, // Specify JSON data
+              body: JSON.stringify({
+                username: username2,
+                password: password2,
+                email: email2,
+              }),
+            }
+          );
+
+          const data = await response.json();
+
+          if (response.ok) {
+            console.log("User registered successfully:", data);
+            if (!document.getElementById("log")) {
+              const paragraph = document.createElement("p");
+              paragraph.style.color = "green";
+              paragraph.innerText = "User registered successfully!";
+              paragraph.id = "log";
+              document.body.appendChild(paragraph);
+            } else {
+              const log = document.getElementById("log");
+              log.style.color = "green";
+              log.innerText = "User registered successfully!";
+            }
+          } else {
+            console.error("Error registering user:", data);
+            if (!document.getElementById("log")) {
+              const paragraph = document.createElement("p");
+              paragraph.style.color = "red";
+              paragraph.innerText = "Error registering user!";
+              paragraph.id = "log";
+              document.body.appendChild(paragraph);
+            } else {
+              const log = document.getElementById("log");
+              log.style.color = "red";
+              if (data.message === "Username already exists!") {
+                log.innerText = `Error registering user: Username already in use!`;
+                document.getElementById("usernameNotTaken").style.color = "red";
+              } else {
+                log.innerText = `Error registering user!`;
+              }
+            }
+          }
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      }
+    </script>
+  </body>
+</html>
